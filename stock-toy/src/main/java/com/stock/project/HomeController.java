@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,7 +34,28 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "home";
+		return "index";
 	}
+	
+	@GetMapping(value="/page")
+	public String page() throws Exception{
+		return "/page";
+	}
+	
+	@GetMapping(value="/userpage")
+	public String userPage() throws Exception {
+		return "/userpage";
+	}
+	
+	@GetMapping(value="/memberpage")
+	public String memberPage() throws Exception {
+		return "/memberpage";
+	}
+	
+	@GetMapping(value="/adminpage")
+	public String adminPage() throws Exception {
+		return "/adminpage";
+	}
+	
 	
 }
