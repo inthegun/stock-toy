@@ -37,24 +37,16 @@ public class HomeController {
 		return "index";
 	}
 	
-	@GetMapping(value="/page")
-	public String page() throws Exception{
-		return "/page";
+	@GetMapping(value="/user/page")
+	public String userpage() throws Exception{
+		return "/user/page";
 	}
+
 	
-	@GetMapping(value="/userpage")
-	public String userPage() throws Exception {
-		return "/userpage";
-	}
 	
-	@GetMapping(value="/memberpage")
-	public String memberPage() throws Exception {
-		return "/memberpage";
-	}
-	
-	@GetMapping(value="/adminpage")
+	@GetMapping(value="/admin/page")
 	public String adminPage() throws Exception {
-		return "/adminpage";
+		return "/admin/page";
 	}
 	
 	

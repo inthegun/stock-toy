@@ -1,31 +1,178 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans xmlns="http://www.springframework.org/schema/security"  
-             xmlns:beans="http://www.springframework.org/schema/beans"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.springframework.org/schema/beans
-                                 http://www.springframework.org/schema/beans/spring-beans.xsd
-                                 http://www.springframework.org/schema/security
-                                 http://www.springframework.org/schema/security/spring-security.xsd">
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+         
+         <!-- 이 부분 꼭 있어야됨 security 설정파일에서 SqlSessionTemplate 부분 찾음 -->                        
+        <!--  <context:component-scan base-package="com.stock.doa"/>   -->                      
+                                 
+        <!-- 스프링 시큐리티 , 보안 관련 컨텍스트 파일 관리 security-context.xml -->   
         
-        <http auto-config="true" use-expressions="true"> <!-- auto-config 속성 자동 설정  use-expression 속성 intercept-url에 SpEL 문법의 사용 유무-->
-            <!-- <intercept-url pattern="/member/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/> -->
-            <intercept-url pattern="/user*" access="hasAnyRole('ROLE_USER','ROLE_MEMBER','ROLE_ADMIN')"/>
-   			<intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')"/>
+        <!-- <http auto-config='true' use-expressions="true"> -->  <!-- 스프링 시큐리티 기본 로그인 페이지 제공  -->
+        <!-- 
+        	<intercept-url pattern="/resources/**" access="permitAll"/> 모두 접근 가능 순서 유의
+        	<intercept-url pattern="/login/**"  access="permitAll"/> 모두 접근 가능
+        	 -->
+        	<!-- <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/> --> <!-- ROLE_USER만 접근가능 -->
+        	<!-- <intercept-url pattern="/**" access="permitAll"/> -->
+        	
+        	<!-- <intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/> --> <!--  /** 모든 디렉토리와 파일 , ROLE_ADMIN만 모든 디렉토리와 파일 접근 가능   -->
+
+				<!-- 로그인 페이지 커스텀 
+					login-page: 로그인 페이지 url
+					login-processing-url : form태그의 action URL 즉 로그인 처리하는 부분 필요하지않음
+					authentication-failure-url : 로그일 실패(아이디 패스워드 틀린경우) 이동할 url 
+					default-target-url : 로그인 성공시 이동하는 주소
+				 -->
+			<!-- 	 
+        	<form-login 
+        	login-page="/login/loginPage.do"
+        	login-processing-url="/login"
+       			default-target-url="/"
+       			authentication-failure-url="/login/loginPage.do?err=true"
+       			username-parameter="userid"
+       			password-parameter="userpw"
+       		/> -->
+       		
+       		 <!-- 
+       		<session-management>
+       			<concurrency-control max-sessions="1" expired-url="/"/> 세션 수 설정하여 중복 로그인 방지 , 중복 로그인 발생시 expired-url로 이동
+       		</session-management>
+        	 -->
+        	<!-- 접근 불가 페이지 핸들링 403페이지 대신 띄움 -->
+        	<!-- 
+        	<access-denied-handler
+       			error-page="/login/accessDenied.do"
+       		/>
+        	 -->
+<!--         </http> -->
+        
+        
+        
+        <!-- 
+        <authentication-manager> 유저들의 권한 설정 
+        	<authentication-provider>
+        		<user-service> 
+        			<user name="admin" password="{noop}1234" authorities="ROLE_USER,ROLE_ADMIN"/>
+        			<user name="guest" password="{noop}1234" authorities="ROLE_USER"/>
+        			<user name="guest2" password="{noop}1234" authorities="ROLE_USER"/>
+        		</user-service>
+        	</authentication-provider>
+        </authentication-manager>
+         -->
+                                 
+                                 
+                    <!--  02.21 2행 : namespace security 지정
+					       참고 블로그 :  https://to-dy.tistory.com/70 -->
+        
+        <http auto-config="true" use-expressions="true"><!--  auto-config 속성 자동 설정  use-expression 속성 intercept-url에 SpEL 문법의 사용 유무 -->
+            <!-- <intercept-url pattern="/guest/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/> -->
+            <intercept-url pattern="/user/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')"/>
+   			<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+ 
    			<intercept-url pattern="/**" access="permitAll"/>
-        </http>   <!-- 모든 URL 접속하기 위해선 ROLE_USER 권한 필요 추후에 원하는 권한설정대로 커스텀
+   			
+   			 
+         <!-- 모든 URL 접속하기 위해선 ROLE_USER 권한 필요 추후에 원하는 권한설정대로 커스텀
         	 intercept-url 경우 위에서부터 매칭 되서 특수한 경우를 위에 둠 .  SpEL 문법 관련 링크 : https://to-dy.tistory.com/75?category=720806  -->
+        	 
+       		
+       		<!-- 커스텀 로그인 화면속성 세팅시 form 방식 로그인 하려면 form-login 추가 
+       			아이디 입력 input 태그 name 속성값  기본값 usernmae
+       			패스워드 속성값 기본값 password , form action 속성값
+       			로그인 페이지 url , 로그인 성공시 가게될 페이지 -->
+       			
+       		<form-login
+       			username-parameter="loginId"
+       			password-parameter="loginPwd"
+       			login-processing-url="/login"
+       			login-page="/secu/loginPage"
+       			default-target-url="/"
+       		/>
+       		
+       		<session-management>
+<concurrency-control max-sessions="1" expired-url="/" />
+</session-management>
+       		 
+       		<!-- 접근 불가 페이지 커스터마이징 403 페이지를 띄우지 않고 지정한 페이지로 이동하게 설정 -->
+       		
+       		<access-denied-handler
+       			error-page="/access_denied_page"
+       		/> 
+       		
+       		<!-- logout-url 로그아웃 처리에 대한 url
+       		     logout-success-url 로그아웃 성공시 이동할 url 
+       		     관련 링크 https://to-dy.tistory.com/82?category=720806-->
+       		     
+       		<logout 
+       			logout-url="/logout" 
+       			invalidate-session="true"
+       			logout-success-url="/"
+       		/> 
+       		       	 
+	     </http>  
+       
+       <!-- data-source-ref에는 root-context에서 설정한 bean id를 가져오면 됨 -->
+       <!-- 사용자 인증 컬럼 : SQL문 작성 -->
+       <!-- as 뒤에있는 부분은 security 설정에서 <form-login> 태그에 설정한 값 -->
+       <!-- 사용자 인증 컬럼에 ENABLED가 없으면 에러발생할수 있음 users-by-username-query에서는 username,password,enable 3가지 컬럼 필수  -->
+       <!-- 
+       <jdbc-user-service data-source-ref="dataSource" id="userService"
+   		 users-by-username-query="SELECT ID as loginId, PASSWORD as loginPwd, ENABLED FROM tbl_user WHERE ID=?"
+  		  authorities-by-username-query="SELECT ID as loginID, AUTHORITY FROM tbl_user WHERE ID=?"
+		/>
+		 
         
-        <authentication-manager> <!-- 인증과 관련된 정보 설정 -->
-            <authentication-provider> <!-- 인증에 대한 정보를 제공하는 제공자는 지정하는 태그  -->
-                <user-service> <!--  사용자 정보 설정 : 사용자ID,패스워드권한 지정 가능 -->
-                    <user name="user" password="{noop}userPw" authorities="ROLE_USER"/> <!-- 스프링 최신버전에서는 password에 {noop}를 붙여줘야함. -->
-<!--                     <user name="member" password="{noop}memPw" authorities="ROLE_MEMBER"/> -->
+			<authentication-manager>
+   				 <authentication-provider user-service-ref="userService">
+   				 </authentication-provider>
+			</authentication-manager>
+ -->
+ 										
+ <jdbc-user-service data-source-ref="dataSource" id="userService" 
+    users-by-username-query="SELECT ID as loginId, PASSWORD as loginPwd, ENABLED FROM tbl_user WHERE ID=?"
+    authorities-by-username-query="SELECT ID as loginId,  AUTHORITY FROM tbl_user WHERE ID=?"
+/>
+ 
+
+        
+         <authentication-manager> 
+            <authentication-provider user-service-ref="userService">  <!-- 유저 정보를 가져오는 클래스 bean id로 userService를 추가  -->
+            <!-- 
+                <user-service> 
+                    <user name="user" password="{noop}user" authorities="ROLE_USER"/> 
+					<user name="guest" password="{noop}guest" authorities="ROLE_GUEST"/>
                     <user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
                 </user-service>
+                  -->
+                  <password-encoder ref="passwordEncoder"/>
+
             </authentication-provider>
-        </authentication-manager>
+        </authentication-manager> 
+        <!-- 인증과 관련된 정보 설정 -->
+        <!-- 인증에 대한 정보를 제공하는 제공자는 지정하는 태그  -->
+        <!--  사용자 정보 설정 : 사용자ID,패스워드권한 지정 가능 -->
+        <!-- 스프링 최신버전에서는 password에 {noop}를 붙여줘야함. -->
+        <!--                     <user name="member" password="{noop}memPw" authorities="ROLE_MEMBER"/> -->
+        
+        <!-- 암호화 패키지 -->
+        
+        <beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors"
+		factory-method="noOpText" />
+		
+	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
+		factory-method="getInstance" />
+		
+		<!--  -->
+        <!-- <beans:bean id="userService" class="com.stock.service.CustomUserDetailsService"/> --> <!-- UserDetailsService 인터페이스를 구현해서 만든 클래스를 userService라는 이름으로 bean 등록  -->
+        
+       <!--  <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.NoOpPasswordEncoder" factory-method = "getInstance" /> -->
+	<!-- <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />  -->
+    
     
 </beans:beans>
 
-<!--  02.21 2행 : namespace security 지정
- 참고 블로그 :  https://to-dy.tistory.com/70 -->
