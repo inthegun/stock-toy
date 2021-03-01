@@ -21,16 +21,9 @@ public class LoginController {
 	// 접근 불가 페이지 접근시
 	@RequestMapping(value="/access_denied_page")
 	public String accessDeniedPage() throws Exception{
-		return "/access_denied_[age";
+		return "/access_denied_page";
 	}
 	
-	@RequestMapping(value="/login/access_denied")
-	public ModelAndView accessDenied() throws Exception{
-		ModelAndView mv = new ModelAndView("/goIndex");
-		mv.addObject("msg","접근 권한이 없습니다");
-		mv.addObject("url","/");
-		return mv;
-	}
 	
 	
 

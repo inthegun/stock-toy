@@ -26,7 +26,7 @@
 				<c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
 					<font color="red">
 				  		<p>Your login attempt was not successful due to <br/>
-				  		${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}</p>
+				  		 <%-- ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} --%></p>
 						<c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
 					</font>
 				</c:if>

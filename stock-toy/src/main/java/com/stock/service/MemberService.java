@@ -15,8 +15,12 @@ public class MemberService {
 	
 	public void register_member(MemberVO memberVO) {
 		System.out.println("MemberService register_member");
+		System.out.println("받은 데이터 : "+memberVO);
+		
 		memberMapper.register_member(memberVO);
 	}
+	
+	
 	
 	
 }

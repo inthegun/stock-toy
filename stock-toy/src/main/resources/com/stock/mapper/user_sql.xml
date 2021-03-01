@@ -9,8 +9,10 @@
 			FROM
 				tbl_user
 			WHERE
-				ID=#{ loginId} 
+				ID=#{ loginId}
 		]]> <!-- 로그인 페이지에서 지정한 ID의 input 태그의 있는 name 속성을 적어준다  -->
 	</select>
+	
+	
 	
  </mapper>

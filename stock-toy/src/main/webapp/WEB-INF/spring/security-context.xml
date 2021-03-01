@@ -141,7 +141,12 @@
 
         
          <authentication-manager> 
-            <authentication-provider user-service-ref="userService">  <!-- 유저 정보를 가져오는 클래스 bean id로 userService를 추가  -->
+            <authentication-provider user-service-ref="userService"><!-- 유저 정보를 가져오는 클래스 bean id로 userService를 추가  -->
+           		 <password-encoder ref="passwordEncoder"/>
+            </authentication-provider>  
+            <authentication-provider ref="userAuthProvider">
+            
+            </authentication-provider>
             <!-- 
                 <user-service> 
                     <user name="user" password="{noop}user" authorities="ROLE_USER"/> 
@@ -149,9 +154,8 @@
                     <user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
                 </user-service>
                   -->
-                  <password-encoder ref="passwordEncoder"/>
+                  <!-- <password-encoder ref="passwordEncoder"/> -->
 
-            </authentication-provider>
         </authentication-manager> 
         <!-- 인증과 관련된 정보 설정 -->
         <!-- 인증에 대한 정보를 제공하는 제공자는 지정하는 태그  -->
@@ -164,15 +168,21 @@
         <beans:bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors"
 		factory-method="noOpText" />
 		
+		<!-- 
 	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"
 		factory-method="getInstance" />
+		 -->
+		 
+		<!-- 패스워드 암호화 적용  -->
+		<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />  
+    
 		
 		<!--  -->
         <beans:bean id="userService" class="com.stock.service.CustomUserDetailsService"/> <!-- UserDetailsService 인터페이스를 구현해서 만든 클래스를 userService라는 이름으로 bean 등록  -->
         
+        <beans:bean id="userAuthProvider" class="com.stock.service.CustomAuthenticationProvider"/>
        <!--  <beans:bean id ="passwordEncoder" class = "org.springframework.security.crypto.NoOpPasswordEncoder" factory-method = "getInstance" /> -->
-	<!-- <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />  -->
-    
+	
     
 </beans:beans>
 

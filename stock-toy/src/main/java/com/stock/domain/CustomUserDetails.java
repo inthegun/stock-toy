@@ -18,6 +18,21 @@ public class CustomUserDetails implements UserDetails {
 	private boolean ENABLED;
 	private String NAME;
 	
+	// 기본 생성자
+	public CustomUserDetails() {
+		
+	}
+	
+	// 생성자
+	public CustomUserDetails(String iD, String pASSWORD, String aUTHORITY, boolean eNABLED, String nAME) {
+		super();
+		ID = iD;
+		PASSWORD = pASSWORD;
+		AUTHORITY = aUTHORITY;
+		ENABLED = eNABLED;
+		NAME = nAME;
+	}
+	
 	// 계정이 갖고있는 권한을 목록으로 리턴
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -25,6 +40,8 @@ public class CustomUserDetails implements UserDetails {
 		auth.add(new SimpleGrantedAuthority(AUTHORITY));
 		return auth;
 	}
+
+	
 
 	@Override  // 계정 비밀번호 리턴
 	public String getPassword() {
@@ -63,5 +80,39 @@ public class CustomUserDetails implements UserDetails {
 	public void setNAME(String name) {
 		NAME = name;
 	}
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+
+	public String getPASSWORD() {
+		return PASSWORD;
+	}
+
+	public void setPASSWORD(String pASSWORD) {
+		PASSWORD = pASSWORD;
+	}
+
+	public String getAUTHORITY() {
+		return AUTHORITY;
+	}
+
+	public void setAUTHORITY(String aUTHORITY) {
+		AUTHORITY = aUTHORITY;
+	}
+
+	public boolean isENABLED() {
+		return ENABLED;
+	}
+
+	public void setENABLED(boolean eNABLED) {
+		ENABLED = eNABLED;
+	}
+	
+	
 
 }

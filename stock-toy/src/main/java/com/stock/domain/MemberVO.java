@@ -7,8 +7,10 @@ import lombok.Data;
 @Repository
 @Data
 public class MemberVO {
-	private String mem_id; // 아이디
-	private String mem_password; // 비밀번호
-	private String mem_name; // 이름
-	private String mem_date; // 가입일
+	// 사용자 정보 멤버변수 선언 
+		private String ID;
+		private String PASSWORD;
+		private String AUTHORITY;
+		private boolean ENABLED;
+		private String NAME;
 }

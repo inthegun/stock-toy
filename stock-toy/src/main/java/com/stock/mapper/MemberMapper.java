@@ -12,7 +12,7 @@ public interface MemberMapper {
 	
 	// 회원가입 
 	
-	final String REGISTER = "";
+	final String REGISTER = "INSERT INTO tbl_user(ID,PASSWORD,NAME,ENABLED) VALUES ( #{ID,jdbcType=VARCHAR}, #{PASSWORD,jdbcType=VARCHAR} , #{NAME,jdbcType=VARCHAR}, 1)";
 	
 	@Insert(REGISTER)
 	void register_member(MemberVO memberVO);
